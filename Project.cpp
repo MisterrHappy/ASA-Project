@@ -17,8 +17,8 @@ class DirectedGraph {
         vector<int>* SCCs;
 
     public:
-        DirectedGraph(int vNumber) 
-        : vNumber(vNumber), adj(new vector<int>[vNumber]), SCCs(new vector<int>[vNumber]) {}
+        DirectedGraph(int Number) 
+        : vNumber(Number), adj(new vector<int>[Number]), SCCs(new vector<int>[Number]) {}
 
         ~DirectedGraph() {
             delete[]adj;
@@ -26,12 +26,13 @@ class DirectedGraph {
         }
 
         void addEdge(int vertex, int edge) {
-            adj[vertex].push_back(edge);
+            adj[vertex - 1].push_back(edge - 1);
         }
 
-        void SCCSubBuild(int u, int disc[], int low[], stack<int> *st, bool stackMember[], int* grades, int SCCPos) { 
+        void SCCSubBuild(int u, int disc[], int low[], stack<int> *st, bool stackMember[], int grades[], int &SCCPos) { 
         
-            int time = 0, w = 0, x = 0, maxGrade = 0;
+            static int time = 0;
+            int w = 0, x = 0, maxGrade = 0;
 
             disc[u] = low[u] = ++time; 
             st->push(u); 
@@ -43,7 +44,6 @@ class DirectedGraph {
             
                 if (disc[v] == -1) { 
                     SCCSubBuild(v, disc, low, st, stackMember, grades, SCCPos);
-                    maxGrade = 0; 
                     low[u]  = min(low[u], low[v]); 
                 } 
     
@@ -52,7 +52,9 @@ class DirectedGraph {
             }
 
             if (low[u] == disc[u]) {
+                printf("boas\n");
                 while (st->top() != u) { 
+                    puts("ola");
                     w = (int) st->top(); 
 
                     stackMember[w] = false;
@@ -80,6 +82,7 @@ class DirectedGraph {
                 grades[g - 1] = maxGrade;
             }
             ++SCCPos;
+            
         }
 
         void SCCBuild(int* grades) { 
@@ -95,13 +98,13 @@ class DirectedGraph {
                 stackMember[x] = false; 
             }
 
-            for (int x = 0; x < vNumber; x++) 
+            for (int x = 0; x < vNumber; x++) {
                 if (disc[x] == -1) 
                     SCCSubBuild(x, disc, low, st, stackMember, grades, SCCPos);
+            }
             delete[]disc;
             delete[]low;
             delete[]stackMember;
-            delete[]st; 
         } 
 
 };
