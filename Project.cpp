@@ -52,16 +52,15 @@ class DirectedGraph {
             }
 
             if (low[u] == disc[u]) {
-                printf("boas\n");
                 while (st->top() != u) { 
-                    puts("ola");
+                    
                     w = (int) st->top(); 
 
                     stackMember[w] = false;
                     SCCs[SCCPos].push_back(w);
 
-                    if (grades[w - 1] > maxGrade)
-                        maxGrade = grades[w - 1];
+                    if (grades[w] > maxGrade)
+                        maxGrade = grades[w];
 
                     st->pop(); 
                 } 
@@ -71,18 +70,21 @@ class DirectedGraph {
 
                 SCCs[SCCPos].push_back(w);
 
-                if (grades[w - 1] > maxGrade)
-                    maxGrade = grades[w - 1];
+                if (grades[w] > maxGrade)
+                    maxGrade = grades[w];
 
                 st->pop(); 
             }
             vector<int>::iterator j;
             for (j = SCCs[SCCPos].begin(); j != SCCs[SCCPos].end(); ++j) {
                 int g = *j;
-                grades[g - 1] = maxGrade;
+                grades[g] = maxGrade;
             }
+
+            if (st->empty() == false && grades[(int) st->top()] < maxGrade)
+                grades[(int) st->top()] = maxGrade;
+
             ++SCCPos;
-            
         }
 
         void SCCBuild(int* grades) { 
@@ -101,6 +103,7 @@ class DirectedGraph {
             for (int x = 0; x < vNumber; x++) {
                 if (disc[x] == -1) 
                     SCCSubBuild(x, disc, low, st, stackMember, grades, SCCPos);
+                
             }
             delete[]disc;
             delete[]low;
