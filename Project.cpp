@@ -75,9 +75,9 @@ class DirectedGraph {
 
                 st.pop(); 
             }
-            vector<int>::iterator j;
-            for (j = SCCs[SCCPos].begin(); j != SCCs[SCCPos].end(); ++j) {
-                int g = *j;
+        
+            for (i = SCCs[SCCPos].begin(); i != SCCs[SCCPos].end(); ++i) {
+                int g = *i;
                 grades[g] = maxGrade;
             }
 
