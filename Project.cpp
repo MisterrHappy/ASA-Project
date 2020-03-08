@@ -29,13 +29,13 @@ class DirectedGraph {
             adj[vertex - 1].push_back(edge - 1);
         }
 
-        void SCCSubBuild(int u, int disc[], int low[], stack<int> *st, bool stackMember[], int grades[], int &SCCPos) { 
+        void SCCSubBuild(int u, int disc[], int low[], stack<int> &st, bool stackMember[], int grades[], int &SCCPos) { 
         
             static int time = 0;
-            int w = 0, x = 0, maxGrade = 0;
+            int w = 0, maxGrade = 0;
 
             disc[u] = low[u] = ++time; 
-            st->push(u); 
+            st.push(u); 
             stackMember[u] = true; 
         
             vector<int>::iterator i; 
@@ -52,9 +52,9 @@ class DirectedGraph {
             }
 
             if (low[u] == disc[u]) {
-                while (st->top() != u) { 
+                while (st.top() != u) { 
                     
-                    w = (int) st->top(); 
+                    w = (int) st.top(); 
 
                     stackMember[w] = false;
                     SCCs[SCCPos].push_back(w);
@@ -62,9 +62,9 @@ class DirectedGraph {
                     if (grades[w] > maxGrade)
                         maxGrade = grades[w];
 
-                    st->pop(); 
+                    st.pop(); 
                 } 
-                w = (int) st->top(); 
+                w = (int) st.top(); 
                
                 stackMember[w] = false;
 
@@ -73,7 +73,7 @@ class DirectedGraph {
                 if (grades[w] > maxGrade)
                     maxGrade = grades[w];
 
-                st->pop(); 
+                st.pop(); 
             }
             vector<int>::iterator j;
             for (j = SCCs[SCCPos].begin(); j != SCCs[SCCPos].end(); ++j) {
@@ -81,8 +81,8 @@ class DirectedGraph {
                 grades[g] = maxGrade;
             }
 
-            if (st->empty() == false && grades[(int) st->top()] < maxGrade)
-                grades[(int) st->top()] = maxGrade;
+            if (st.empty() == false && grades[(int) st.top()] < maxGrade)
+                grades[(int) st.top()] = maxGrade;
 
             ++SCCPos;
         }
@@ -92,7 +92,7 @@ class DirectedGraph {
             int *disc = new int[vNumber]; 
             int *low = new int[vNumber]; 
             bool *stackMember = new bool[vNumber]; 
-            stack<int> *st = new stack<int>(); 
+            stack<int> st; 
     
             for (int x = 0; x < vNumber; x++) { 
                 disc[x] = -1; 
