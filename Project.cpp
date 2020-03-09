@@ -64,8 +64,7 @@ class DirectedGraph {
                     stackMember[w] = false;
                     SCCs[SCCPos].push_back(w);
 
-                    if (grades[w] > maxGrade)
-                        maxGrade = grades[w];
+                    maxGrade = (grades[w] > maxGrade) ? grades[w] : maxGrade;
 
                     st.pop(); 
                 } 
@@ -75,8 +74,7 @@ class DirectedGraph {
 
                 SCCs[SCCPos].push_back(w);
 
-                if (grades[w] > maxGrade)
-                    maxGrade = grades[w];
+                maxGrade = (grades[w] > maxGrade) ? grades[w] : maxGrade;
 
                 st.pop(); 
             }
