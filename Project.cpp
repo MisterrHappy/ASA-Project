@@ -50,10 +50,9 @@ class DirectedGraph {
                 else if (stackMember[v] == true) 
                     low[u] = min(low[u], disc[v]);
 
-                else if (disc[v] != -1) {
-                    if (grades[u] < grades[v])
-                        grades[u] = grades[v];
-                } 
+                else if (disc[v] != -1) 
+                    grades[u] = (grades[u] < grades[v]) ? grades[v] : grades[u];
+                    
             }
 
             if (low[u] == disc[u]) {
