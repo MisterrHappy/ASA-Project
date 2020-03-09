@@ -48,7 +48,12 @@ class DirectedGraph {
                 } 
     
                 else if (stackMember[v] == true) 
-                    low[u] = min(low[u], disc[v]); 
+                    low[u] = min(low[u], disc[v]);
+
+                else if (disc[v] != -1) {
+                    if (grades[u] < grades[v])
+                        grades[u] = grades[v];
+                } 
             }
 
             if (low[u] == disc[u]) {
@@ -88,9 +93,7 @@ class DirectedGraph {
         }
 
         void SCCBuild(int* grades) { 
-            int SCCPos = 0;
-            int *disc = new int[vNumber]; 
-            int *low = new int[vNumber]; 
+            int SCCPos = 0, *disc = new int[vNumber], *low = new int[vNumber]; 
             bool *stackMember = new bool[vNumber]; 
             stack<int> st; 
     
@@ -103,7 +106,6 @@ class DirectedGraph {
             for (int x = 0; x < vNumber; x++) {
                 if (disc[x] == -1) 
                     SCCSubBuild(x, disc, low, st, stackMember, grades, SCCPos);
-                
             }
             delete[]disc;
             delete[]low;
