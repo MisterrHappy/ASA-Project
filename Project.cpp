@@ -14,22 +14,20 @@ class DirectedGraph {
     private:
         int vNumber;
         vector<int>* adj;
-        vector<int>* SCCs;
 
     public:
         DirectedGraph(int Number) 
-        : vNumber(Number), adj(new vector<int>[Number]), SCCs(new vector<int>[Number]) {}
+        : vNumber(Number), adj(new vector<int>[Number]) {}
 
         ~DirectedGraph() {
             delete[]adj;
-            delete[]SCCs;
         }
 
         void addEdge(int vertex, int edge) {
             adj[vertex - 1].push_back(edge - 1);
         }
 
-        void SCCSubBuild(int u, int disc[], int low[], stack<int> &st, bool stackMember[], int grades[], int &SCCPos) { 
+        void SCCSubBuild(int u, int disc[], int low[], stack<int> &st, bool stackMember[], int grades[]) { 
         
             static int time = 0;
             int w = 0, maxGrade = 0;
@@ -43,7 +41,7 @@ class DirectedGraph {
                 int v = *i;   
             
                 if (disc[v] == -1) { 
-                    SCCSubBuild(v, disc, low, st, stackMember, grades, SCCPos);
+                    SCCSubBuild(v, disc, low, st, stackMember, grades);
                     low[u]  = min(low[u], low[v]); 
                 } 
     
@@ -55,13 +53,14 @@ class DirectedGraph {
                     
             }
 
+            stack<int> scc;
             if (low[u] == disc[u]) {
                 while (st.top() != u) { 
                     
                     w = (int) st.top(); 
 
                     stackMember[w] = false;
-                    SCCs[SCCPos].push_back(w);
+                    scc.push(w);
 
                     maxGrade = (grades[w] > maxGrade) ? grades[w] : maxGrade;
 
@@ -71,26 +70,24 @@ class DirectedGraph {
                
                 stackMember[w] = false;
 
-                SCCs[SCCPos].push_back(w);
+                scc.push(w);
 
                 maxGrade = (grades[w] > maxGrade) ? grades[w] : maxGrade;
 
                 st.pop(); 
             }
-        
-            for (i = SCCs[SCCPos].begin(); i != SCCs[SCCPos].end(); ++i) {
-                int g = *i;
-                grades[g] = maxGrade;
+
+            while (!scc.empty()) {
+                grades[(int) scc.top()] = maxGrade;
+                scc.pop();
             }
 
-            if (st.empty() == false && grades[(int) st.top()] < maxGrade)
+            if (!st.empty() && grades[(int) st.top()] < maxGrade)
                 grades[(int) st.top()] = maxGrade;
-
-            ++SCCPos;
         }
 
         void SCCBuild(int* grades) { 
-            int SCCPos = 0, *disc = new int[vNumber], *low = new int[vNumber]; 
+            int *disc = new int[vNumber], *low = new int[vNumber]; 
             bool *stackMember = new bool[vNumber]; 
             stack<int> st; 
     
@@ -102,7 +99,7 @@ class DirectedGraph {
 
             for (int x = 0; x < vNumber; x++) {
                 if (disc[x] == -1) 
-                    SCCSubBuild(x, disc, low, st, stackMember, grades, SCCPos);
+                    SCCSubBuild(x, disc, low, st, stackMember, grades);
             }
             delete[]disc;
             delete[]low;
