@@ -139,6 +139,7 @@ int main(int argc, char* argv[]) {
         cout << grades[x] << "\n";
 
     delete[]grades;
+    graph.~DirectedGraph();
 
     exit(EXIT_SUCCESS);
 }
